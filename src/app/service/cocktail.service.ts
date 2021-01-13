@@ -1,17 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { drinksData } from '../models/mocktails';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CocktailService {
+  baseURL = 'https://www.thecocktaildb.com/api/json/v1/1/search.php';
+  filterURL = 'https://www.thecocktaildb.com/api/json/v1/1/filter.php';
 
-  baseURL = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
+  getCocktailsByName(searchText: string = ''): Observable<drinksData> {
+    return this.http.get<drinksData>(this.baseURL, {
+      params: { s: searchText },
+    });
+  }
 
-  getCocktails(): Observable<object> {
-    return this.http.get(this.baseURL);    
+  getCocktailsByIngredient(searchText: string = ''): Observable<drinksData> {
+    return this.http.get<drinksData>(this.baseURL, {
+      params: { i: searchText },
+    });
+  }
+
+  getCocktailsByCategory(searchText: string = ''): Observable<drinksData> {
+    return this.http.get<drinksData>(this.baseURL, {
+      params: { c: searchText },
+    });
   }
 }
